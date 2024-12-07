@@ -1,0 +1,109 @@
+name: TuTu Builder
+
+on:
+  push:
+    tags:
+      - T*
+# 并发策略
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  # 如果有新的运行实例，取消正在进行的实例
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build
+    # 运行环境，基于矩阵策略
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: ./TuTu
+
+    strategy:
+      matrix:
+        type: [ macos, windows ]
+        include:
+          - type: macos
+            os: macos-latest
+            path: build/macos/Build/Products/Release
+            output: TuTu.app
+
+          - type: windows
+            os: windows-latest
+            path: build\windows\x64\runner
+            output: Release
+
+    steps:
+      - name: PullTuTuCode
+        uses: actions/checkout@v4
+        with:
+          repository: TuTu-Tools/TuTu
+          token: ${{ secrets.TUTU_RElEASE_TOKEN }} # `GH_PAT` is a secret that contains your PAT
+          path: TuTu
+
+      - name: FlutterAction
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.24.5
+
+      - run: flutter --version
+
+      - run: flutter pub get
+
+      - run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: GetVersion(macos)
+        if: ${{ matrix.type == 'macos' }}
+        run: |
+          echo "version=$(awk -F': ' '/version:/ {gsub("\\+", "-", $2); print $2}' pubspec.yaml)" >> "$GITHUB_ENV"
+
+      - name: GetVersion(windows)
+        if: ${{ matrix.type == 'windows' }}
+        shell: pwsh
+        run: |
+          $version = (Get-Content pubspec.yaml -Raw) -match 'version:\s*([^\s]+)' | Out-Null
+          $version = $Matches[1] -replace '\+', '-'
+          echo "version=$version" | Out-File -Append -Encoding utf8 -FilePath $Env:GITHUB_ENV
+
+      - name: PrintVersion
+        run: |
+          echo "version: ${{ env.version }}"
+          echo "path ${{ matrix.path }}"
+          echo "output ${{ matrix.output }}"
+
+      - name: Build(MacOS)
+        if: ${{ matrix.type == 'macos' }}
+        run: flutter build macos
+
+      - name: BuildDMG(MacOS)
+        if: ${{ matrix.type == 'macos' }}
+        uses: L-Super/create-dmg-actions@v1.0.3
+        with:
+          dmg_name: "TuTu-${{ matrix.type }}"
+          src_dir: "./TuTu/${{ matrix.path }}/${{ matrix.output }}"
+
+      - name: Build(Windows)
+        if: ${{ matrix.type == 'windows' }}
+        shell: pwsh
+        run: flutter build windows
+
+      - name: 压缩产物(windows)
+        if: ${{ matrix.type == 'windows' }}
+        shell: pwsh
+        run: |
+            Compress-Archive -Path '${{ matrix.path }}\${{ matrix.output }}' -DestinationPath 'TuTu-${{ matrix.type }}.zip'
+
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: "T${{ env.version }}"
+          draft: false
+          artifacts: "*.dmg,*.zip,TuTu/*.zip,TuTu/*.dmg"
+          allowUpdates: true
+          token: ${{ secrets.TUTU_RElEASE_TOKEN }}
+
+
+
+
