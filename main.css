@@ -1,5 +1,193 @@
+
 #main-content {
-  font-size: 36px;
-  font-weight: bold;
-  padding: 16px;
+    font-size: 36px;
+    font-weight: bold;
+    padding: 16px;
+    height: 100vh;
+    background-color: #f9f9f9; /* 背景底色 */
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px; /* 网格大小 */
+}
+
+
+.main-tutu {
+    position: absolute;
+    left: 0;
+    right: 0;
+    justify-self: center;
+    margin-top: 30vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-tutu-tip-box {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.main-tutu-tip {
+    font-size: 20px;
+    color: #565656;
+    text-align: center;
+}
+
+.main-tutu-logo {
+    width: 365px;
+    height: 140px;
+}
+
+.main-tutu-download {
+    padding: 6px 12px;
+    margin-left: 20px;
+    font-size: 14px;
+    color: #565656;
+    background-color: #E1E1E1;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.main-tutu-download:hover {
+    background-color: #A1A1A1; /* 鼠标悬停时的背景颜色 */
+}
+
+.main-tutu-download-arrow {
+    width: 12px;
+    height: 12px;
+    background-image: url('arrow.png'); /* 替换为你的箭头图片路径 */
+    background-size: contain;
+    background-repeat: no-repeat;
+    color: #565656;
+}
+
+.main-item-box {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.main-item {
+    display: flex;
+    flex-direction: row;
+    height: 20px;
+    animation: blink 4s infinite ease-in-out;
+    position: absolute;
+    left: 200px;
+    top: 200px;
+}
+
+.main-item-name {
+    font-size: 20px;
+    color: darkgreen;
+    align-self: center;
+}
+
+.main-item-version {
+    background-color: #000000;
+    font-size: 10px;
+    height: 14px;
+    color: goldenrod;
+    padding: 1px 4px;
+    border-radius: 4px;
+}
+
+.main-item-color-0 {
+    color: deeppink;
+}
+
+.main-item-color-1 {
+    color: dodgerblue;
+}
+
+.main-item-color-2 {
+    color: limegreen;
+}
+
+.main-item-color-3 {
+    color: orange;
+}
+
+.main-item-color-4 {
+    color: goldenrod;
+}
+
+.main-item-color-5 {
+    color: crimson;
+}
+
+.main-item-color-6 {
+    color: mediumorchid;
+}
+
+.main-item-color-7 {
+    color: teal;
+}
+
+.main-item-color-8 {
+    color: tomato;
+}
+
+.main-item-color-9 {
+    color: slateblue;
+}
+
+
+.main-item-anim-0 {
+    animation-delay: 1s;
+}
+
+.main-item-anim-1 {
+    animation-delay: 1.5s;
+}
+
+.main-item-anim-2 {
+    animation-delay: 2s;
+}
+
+.main-item-anim-3 {
+    animation-delay: 2.5s;
+}
+
+.main-item-anim-4 {
+    animation-delay: 3s;
+}
+
+.main-item-anim-5 {
+    animation-delay: 1s;
+}
+
+.main-item-anim-6 {
+    animation-delay: 1.5s;
+}
+
+.main-item-anim-7 {
+    animation-delay: 2s;
+}
+
+.main-item-anim-8 {
+    animation-delay: 2.5s;
+}
+
+.main-item-anim-9 {
+    animation-delay: 3s;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
 }
