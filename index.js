@@ -5,7 +5,10 @@ const functionList = [
     ["Bing搜索", "T1.0.0"],
     ["搜索记录", "T1.0.0"],
     ["书签管理", "T1.0.0"],
-    ["访问书签", "T1.0.0"]
+    ["访问书签", "T1.0.0"],
+    ["Base64编码/解码", "T1.0.1"],
+    ["URL编码/解码", "T1.0.1"],
+    ["Unicode 中文编码/解码", "T1.0.1"],
 ]
 
 function getRandomNumber(min, max) {
